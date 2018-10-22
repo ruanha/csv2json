@@ -9,11 +9,12 @@ module.exports = class {
   }
 
   parse(data) {
+    // this.splitDataToRows(data.replace(/\"{2}/g, '$'))
     this.splitDataToRows(data)
     if (this.headerBool) {
       this.parsed.headers = this.parsed.rows.shift()
+      this.splitHeaders()
     }
-    this.splitHeaders()
     this.splitDataEntries()
   }
 
@@ -26,12 +27,14 @@ module.exports = class {
         inQuotes = !inQuotes
       }
       if (char === '\n' && !inQuotes) {
+        //this.parsed.rows.push([rowString.replace(/\"{2}/g, '$')])
         this.parsed.rows.push([rowString])
         rowString = ''
       } else {
         rowString += char
       }
     }
+    //console.log(data, this.parsed.rows)
   }
 
   splitHeaders() {
@@ -44,11 +47,30 @@ module.exports = class {
     }
   }
 
+  fixQuotes(separated) {
+    const newSeparated = []
+    let me = this.headers
+    separated.forEach((entry) => {
+      let newEntry = entry
+      if (entry[0] === '"') {
+        console.log("remove that quote!")
+        newEntry = entry.slice(1, -1)
+      }
+      newEntry = newEntry.replace(/"{2}/g, '"')
+      newSeparated.push(newEntry)
+    })
+    console.log("separated: ", separated, 'newSeparated: ', newSeparated)
+    return newSeparated
+  }
+
+
   splitRowAtSeparator(row) {
-    // takes a string and splits it on a separator char if that char is not inside quotes
+    /* takes a string and splits it on a separator char if that char is not
+    inside quotes
+    */
     let inQuotes = false
     let entry = ''
-    const separated = []
+    let separated = []
     for (let i = 0; i < row.length; i++) {
       const char = row[i]
 
@@ -56,16 +78,23 @@ module.exports = class {
         if (inQuotes) {
           entry += char
         } else {
+          if (entry[0] === '"') {
+            entry = entry.slice(1, -1)
+            entry = entry.replace(/""/g, '"')
+          }
           separated.push(entry.trim())
           entry = ''
         }
       } else if (char === '"') {
         inQuotes = !inQuotes
+        entry += char
       } else {
         entry += char
       }
     }
     separated.push(entry.trim())
+
+    //separated = this.fixQuotes(separated)
 
     console.log(row, separated)
 
