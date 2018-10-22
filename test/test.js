@@ -140,3 +140,16 @@ describe('Handle double quotes', function() {
     })
   })
 })
+
+describe('Check example data', function() {
+  let p = new Parser(false, ',')
+  describe('check file example_data.csv', function() {
+    fs.readFile(__dirname + '/testfiles/example_data.csv', 'utf-8', function(err, data) {
+      p.parse(data)
+    })
+    
+    it('is equal', function() {
+      assert.deepEqual(p.parsed, exampleData)
+    })
+  })
+})
