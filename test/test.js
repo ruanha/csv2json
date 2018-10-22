@@ -57,4 +57,15 @@ describe('Split data entries on separator', function() {
       assert.deepEqual(p.parsed, commaTextOnlyTest)
     })
   })
+  describe('split on different separator', function() {
+    let p = new Parser(true, '|')
+    fs.readFile(__dirname + '/testfiles/separators.csv', 'utf-8', function(err, data) {
+      p.parse(data)
+    })
+    
+    it('is equal', function() {
+      assert.deepEqual(p.parsed, commaTextOnlyTest)
+    })
+  })
 })
+
