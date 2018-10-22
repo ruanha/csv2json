@@ -9,7 +9,6 @@ module.exports = class {
   }
 
   parse(data) {
-    // this.splitDataToRows(data.replace(/\"{2}/g, '$'))
     this.splitDataToRows(data)
     if (this.headerBool) {
       this.parsed.headers = this.parsed.rows.shift()
@@ -27,14 +26,12 @@ module.exports = class {
         inQuotes = !inQuotes
       }
       if (char === '\n' && !inQuotes) {
-        //this.parsed.rows.push([rowString.replace(/\"{2}/g, '$')])
         this.parsed.rows.push([rowString])
         rowString = ''
       } else {
         rowString += char
       }
     }
-    //console.log(data, this.parsed.rows)
   }
 
   splitHeaders() {
@@ -46,23 +43,6 @@ module.exports = class {
       this.parsed.rows[i] = this.splitRowAtSeparator(this.parsed.rows[i][0])
     }
   }
-
-  fixQuotes(separated) {
-    const newSeparated = []
-    let me = this.headers
-    separated.forEach((entry) => {
-      let newEntry = entry
-      if (entry[0] === '"') {
-        console.log("remove that quote!")
-        newEntry = entry.slice(1, -1)
-      }
-      newEntry = newEntry.replace(/"{2}/g, '"')
-      newSeparated.push(newEntry)
-    })
-    console.log("separated: ", separated, 'newSeparated: ', newSeparated)
-    return newSeparated
-  }
-
 
   splitRowAtSeparator(row) {
     /* takes a string and splits it on a separator char if that char is not
@@ -93,10 +73,6 @@ module.exports = class {
       }
     }
     separated.push(entry.trim())
-
-    //separated = this.fixQuotes(separated)
-
-    console.log(row, separated)
 
     return separated
   }
