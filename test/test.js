@@ -18,6 +18,11 @@ const commaInQuotes = {
   rows: [['Simpson, Lisa', 'eight'], ['Simpson, Bart', 'nine']]
 }
 
+const embeddedLineBreaks = {
+  headers: ['NAME', 'AGE'],
+  rows: [['Lisa\nSimpson', 'eight'], ['Bart\nSimpson', 'nine']]
+}
+
 const parsedCheck = { 
   headers: ['NAME', 'AGE'],
   rows: [['Lisa Simpson', 8], ['Bart Simpson', 9]]
@@ -49,7 +54,6 @@ describe('Split into rows', function() {
       assert.deepEqual(p.parsed, simpleTest)
     })
   })
-
   describe('don\'t split on separator in quotes', function() {
     let p = new Parser(true, ',')
     fs.readFile(__dirname + '/testfiles/comma_in_quotes.csv', 'utf-8', function(err, data) {
@@ -58,6 +62,16 @@ describe('Split into rows', function() {
     
     it('is equal', function() {
       assert.deepEqual(p.parsed, commaInQuotes)
+    })
+  })
+  describe('handle embedded line breaks', function() {
+    let p = new Parser(true, ',')
+    fs.readFile(__dirname + '/testfiles/embedded_line_breaks.csv', 'utf-8', function(err, data) {
+      p.parse(data)
+    })
+    
+    it('is equal', function() {
+      assert.deepEqual(p.parsed, embeddedLineBreaks)
     })
   })
 })

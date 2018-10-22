@@ -18,10 +18,14 @@ module.exports = class {
   }
 
   splitDataToRows(data) {
+    let inQuotes = false
     let rowString = ''
     for (let i = 0; i < data.length; i++) {
       const char = data.charAt(i)
-      if (char === '\n') {
+      if (char === '"') {
+        inQuotes = !inQuotes
+      }
+      if (char === '\n' && !inQuotes) {
         this.parsed.rows.push([rowString])
         rowString = ''
       } else {
