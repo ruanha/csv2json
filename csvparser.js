@@ -35,14 +35,36 @@ module.exports = class {
   }
 
   splitDataEntries() {
-    console.log("now do this:", this.parsed.rows)
     for (let i = 0; i < this.parsed.rows.length; i++) {
-      console.log("specifically this:", this.parsed.rows[i][0])
       this.parsed.rows[i] = this.splitRowAtSeparator(this.parsed.rows[i][0])
     }
   }
 
   splitRowAtSeparator(row) {
-    return row.split(this.separator)
+    // takes a string and splits it on a separator char if that char is not inside quotes
+    let inQuotes = false
+    let entry = ''
+    const separated = []
+    for (let i = 0; i < row.length; i++) {
+      const char = row[i]
+
+      if (char === this.separator || char === '\n') {
+        if (inQuotes) {
+          entry += char
+        } else {
+          separated.push(entry)
+          entry = ''
+        }
+      } else {
+        if (char === '"') {
+          inQuotes = !inQuotes
+        } else {
+          entry += char
+        }
+      }
+    }
+    separated.push(entry)
+
+    return separated
   }
 }
