@@ -83,5 +83,15 @@ describe('Split data entries on separator', function() {
       assert.deepEqual(p.parsed, commaTextOnlyTest)
     })
   })
+  describe('ignore leading and trailing whitespace', function() {
+    let p = new Parser(true, ',')
+    fs.readFile(__dirname + '/testfiles/whitespace.csv', 'utf-8', function(err, data) {
+      p.parse(data)
+    })
+    
+    it('is equal', function() {
+      assert.deepEqual(p.parsed, commaTextOnlyTest)
+    })
+  })
 })
 

@@ -52,18 +52,18 @@ module.exports = class {
         if (inQuotes) {
           entry += char
         } else {
-          separated.push(entry)
+          separated.push(entry.trim())
           entry = ''
         }
+      } else if (char === '"') {
+        inQuotes = !inQuotes
       } else {
-        if (char === '"') {
-          inQuotes = !inQuotes
-        } else {
-          entry += char
-        }
+        entry += char
       }
     }
-    separated.push(entry)
+    separated.push(entry.trim())
+
+    console.log(row, separated)
 
     return separated
   }
