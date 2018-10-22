@@ -8,6 +8,11 @@ const simpleTest = {
   rows: [['Lisa Simpson'], ['Bart Simpson']]
 }
 
+const commaTextOnlyTest = {
+  headers: ['NAME', 'AGE'],
+  rows: [['Lisa Simpson', 'eight'], ['Bart Simpson', 'nine']]
+}
+
 const parsedCheck = { 
   headers: ['NAME', 'AGE'],
   rows: [['Lisa Simpson', 8], ['Bart Simpson', 9]]
@@ -16,21 +21,40 @@ const parsedCheck = {
 describe('Import module', function() {
   describe('import', function() {
     //tests
-    it('is imported', function() {
+    it('imports the Parser module', function() {
       assert(Parser !== null)
     })  
   })
+  describe('create parser object', function() {
+    it('creates a new parser object from the imported Parser class', function() {
+      p = new Parser(true, ',')
+      assert(p !== null)
+    })      
+  })
 })
 
-describe('Split rows', function() {
-  p = new Parser(true, ',')
-  describe('async', function() {
+describe('Split into rows', function() {
+  let p = new Parser(true, ',')
+  describe('split simple (one entry per row) into individual rows', function() {
     fs.readFile(__dirname + '/testfiles/simple.csv', 'utf-8', function(err, data) {
       p.parse(data)
     })
     
     it('is equal', function() {
       assert.deepEqual(p.parsed, simpleTest)
+    })
+  })
+})
+
+describe('Split data entries on separator', function() {
+  let p = new Parser(true, ',')
+  describe('split on comma, only text entries, no commas in quotes', function() {
+    fs.readFile(__dirname + '/testfiles/comma_text_only.csv', 'utf-8', function(err, data) {
+      p.parse(data)
+    })
+    
+    it('is equal', function() {
+      assert.deepEqual(p.parsed, commaTextOnlyTest)
     })
   })
 })

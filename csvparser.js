@@ -1,7 +1,7 @@
 module.exports = class {
-  constructor(header, separator) {
+  constructor(headerBool, separator) {
     this.separator = separator
-    this.header = header
+    this.headerBool = headerBool
     this.parsed = {
       headers: [],
       rows: [],
@@ -10,22 +10,40 @@ module.exports = class {
 
   parse(data) {
     this.splitDataToRows(data)
-    if (this.header) {
+    //this.splitDataEntries()
+    if (this.headerBool) {
       this.parsed.headers = this.parsed.rows.shift()
     }
-    console.log(this.parsed)
+    this.splitHeaders()
+    this.splitDataEntries()
   }
 
   splitDataToRows(data) {
-    let rowString = ""
+    let rowString = ''
     for (let i = 0; i < data.length; i++) {
-      let char = data.charAt(i)
+      const char = data.charAt(i)
       if (char === '\n') {
         this.parsed.rows.push([rowString])
-        rowString = ""
+        rowString = ''
       } else {
         rowString += char
       }
     }
+  }
+
+  splitHeaders() {
+    this.parsed.headers = this.splitRowAtSeparator(this.parsed.headers[0])
+  }
+
+  splitDataEntries() {
+    console.log("now do this:", this.parsed.rows)
+    for (let i = 0; i < this.parsed.rows.length; i++) {
+      console.log("specifically this:", this.parsed.rows[i][0])
+      this.parsed.rows[i] = this.splitRowAtSeparator(this.parsed.rows[i][0])
+    }
+  }
+
+  splitRowAtSeparator(row) {
+    return row.split(',')
   }
 }
