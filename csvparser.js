@@ -1,7 +1,57 @@
+/*
+AUTHOR: Rune Hartvig
+CONTACT: rune_hartvig@hotmail.com
+*/
+
 module.exports = class {
-  constructor(headerBool, separator) {
+  /*
+  DESCRIPTION
+  ----------
+  A class for parsing raw csv data (from a string) into an object (p) that separates
+  the csv data into: 1) a list of the csv-headers (if any) in p.parsed.headers and
+  2) the csv rows of data in p.parsed.rows, as a list of each row, which is
+  represented as lists of the individual data entries:
+    csv row: "Bart, Simpson, 9"
+    p.parsed.rows[0] --> ['Bart', 'Simpson', '9']
+  Notice that all parsed data entries are represented as strings.
+  This parsed object makes it easy to further parse the data into for example a
+  JSON format.
+
+  SEE ALSO
+  --------
+  test/test.js and test/testfiles/...
+  for a suite of tests of the csv parsing abilities of this module.
+
+  PARAMETERS
+  ----------
+  isHeaderIncluded : Bool, default false
+    If true, the first line is used to make a list of headers under parsed.headers
+  separator : String, default ','
+    The separator used in the csv file to separate entries
+  parsed : Object
+    the parsed data is stored as a property on the parsed object, if a header is set
+    by 'isHeaderIncluded' a list of headers are accessed with:
+      p.parsed.headers
+    and the data rows are accessed with:
+      p.parsed.rows
+
+  USAGE
+  -----
+  //Import the class Parser from the module:
+  const Parser = require('../csvparser.js')
+
+  //Create a new object using the class Parser:
+  let p = new Parser()
+
+  //Call the parse method and give it some csv data as argument:
+  p.parse(data)
+
+  //The parsed data is stored in the parser object in the property 'parsed':
+  console.log(p.parsed)
+  */
+  constructor(isHeaderIncluded = true, separator = ',') {
     this.separator = separator
-    this.headerBool = headerBool
+    this.isHeaderIncluded = isHeaderIncluded
     this.parsed = {
       headers: [],
       rows: [],
@@ -10,7 +60,7 @@ module.exports = class {
 
   parse(data) {
     this.splitDataToRows(data)
-    if (this.headerBool) {
+    if (this.isHeaderIncluded) {
       this.parsed.headers = this.parsed.rows.shift()
       this.splitHeaders()
     }
@@ -45,12 +95,9 @@ module.exports = class {
   }
 
   splitRowAtSeparator(row) {
-    /* takes a string and splits it on a separator char if that char is not
-    inside quotes
-    */
     let inQuotes = false
     let entry = ''
-    let separated = []
+    const separated = []
     for (let i = 0; i < row.length; i++) {
       const char = row[i]
 

@@ -38,23 +38,17 @@ const exampleData = {
   ['','Blankman','','SomeTown', 'SD', '00298'],
   ['Joan "the bone", Anne','Jet','9th, at Terrace plc','Desert City','CO','00123']
   ]
-  
-  
-}
-
-const parsedCheck = { 
-  headers: ['NAME', 'AGE'],
-  rows: [['Lisa Simpson', 8], ['Bart Simpson', 9]]
 }
 
 describe('Import module', function() {
   describe('import', function() {
-    //tests
+
     it('imports the Parser module', function() {
       assert(Parser !== null)
     })  
   })
   describe('create parser object', function() {
+
     it('creates a new parser object from the imported Parser class', function() {
       p = new Parser(true, ',')
       assert(p !== null)
