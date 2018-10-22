@@ -10,7 +10,6 @@ module.exports = class {
 
   parse(data) {
     this.splitDataToRows(data)
-    //this.splitDataEntries()
     if (this.headerBool) {
       this.parsed.headers = this.parsed.rows.shift()
     }
@@ -44,6 +43,6 @@ module.exports = class {
   }
 
   splitRowAtSeparator(row) {
-    return row.split(',')
+    return row.split(this.separator)
   }
 }
