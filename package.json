@@ -1,0 +1,19 @@
+{
+  "name": "morningstar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "csvparser.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  },
+  "dependencies": {
+    "mocha": "^5.2.0"
+  }
+}
